@@ -348,10 +348,10 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				<h4>Already have an Account ?<a href="signin.php">  Sign In »</a> </h4>
 			</div>
 			<div class="login-body">
-				<form class="wow fadeInUp animated" data-wow-delay=".7s">
-					<input type="text" placeholder="First Name" required="">
-					<input type="text" placeholder="Last Name" required="">
-					<input type="text" class="email" placeholder="Email Address" required="">
+				<form class="wow fadeInUp animated" data-wow-delay=".7s" action="controller/register-proccess.php" method="post">
+					<input type="text" placeholder="First Name" required="" name="firstname">
+					<input type="text" placeholder="Last Name" required="" name="lastname">
+					<input type="text" class="email" placeholder="Email Address" required="" name="email">
 					<input type="password" name="password" class="lock" placeholder="Password">
 					<input type="submit" name="Register" value="Register">
 				</form>

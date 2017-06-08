@@ -1,9 +1,3 @@
-<!--
-Author: W3layouts
-Author URL: http://w3layouts.com
-License: Creative Commons Attribution 3.0 Unported
-License URL: http://creativecommons.org/licenses/by/3.0/
--->
 <!DOCTYPE html>
 <html>
 <head>
@@ -741,3 +735,12 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     <script src="js/bootstrap.js"></script>
 </body>
 </html>
+<!--
+Author: I4LevelDeveloper
+Author URL: modern-onlishop.com
+Members:
+    1. CHEA LIHEANG         // Developper
+    2. CHIM SEREY           // Developper
+    3. KE SEYHA             // Project leader
+    4. LY CHINCHHAY         // Public relation
+-->
