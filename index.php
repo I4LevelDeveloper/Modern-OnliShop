@@ -53,10 +53,26 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		<div class="top-header navbar navbar-default"><!--header-one-->
 			<div class="container">
 				<div class="nav navbar-nav wow fadeInLeft animated" data-wow-delay=".5s">
-					<p>Welcome to Modern-OnliShop <a href="register.php">Register </a> Or <a href="signin.php">Sign In </a></p>
+					<p>Welcome to Modern-OnliShop
+                        <?php
+                            session_start();
+                            if(!isset($_SESSION['userid'])){
+                                echo "<a href=\"register.php\">Register </a> Or <a href=\"signin.php\">Sign In </a>";
+                            }else{
+                                require_once ('controller/dbconfig.php');
+                                $userid = $_SESSION['userid'];
+                                $sql = "select firstname from users where userid = '$userid'";
+                                $result = $conn->query($sql);
+                                if($result){
+                                    $firstname = $result->fetch_object()->firstname;
+                                    echo "<a href=\"#\">$firstname</a> or <a href=\"signout.php\">Sign out </a>";
+                                }
+                            }
+                        ?>
+                    </p>
 				</div>
-				<div class="nav navbar-nav navbar-right social-icons wow fadeInRight animated" data-wow-delay=".5s">
-					<ul>
+                <div class="nav navbar-nav navbar-right social-icons wow fadeInRight animated" data-wow-delay=".5s">
+                    <ul>
 						<li><a href="#"> </a></li>
 						<li><a href="#" class="pin"> </a></li>
 						<li><a href="#" class="in"> </a></li>
@@ -64,8 +80,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						<li><a href="#" class="you"> </a></li>
 						<li><a href="#" class="vimeo"> </a></li>
 					</ul>
-				</div>
-				<div class="clearfix"> </div>
+                </div>
+
+                <div class="clearfix"> </div>
 			</div>
 		</div>
 		<div class="header-two navbar navbar-default"><!--header-two-->
@@ -98,6 +115,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				<div class="clearfix"> </div>
 			</div>
 		</div>
+
 		<div class="top-nav navbar navbar-default"><!--header-three-->
 			<div class="container">
 				<nav class="navbar" role="navigation">
@@ -314,8 +332,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					<!--//navbar-header-->
 				</nav>
 				<div id="cd-search" class="cd-search">
-					<form>
-						<input type="search" placeholder="Search...">
+					<form action="controller/search-proccess.php" method="get">
+						<input type="search" placeholder="Search..." name="search">
 					</form>
 				</div>
 			</div>

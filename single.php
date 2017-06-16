@@ -72,7 +72,23 @@ $(window).load(function() {
 		<div class="top-header navbar navbar-default"><!--header-one-->
 			<div class="container">
 				<div class="nav navbar-nav wow fadeInLeft animated" data-wow-delay=".5s">
-					<h2>Welcome to Modern Shoppe <a href="register.php">Register </a> Or <a href="signin.php">Sign In </a></h2>
+					<h2>Welcome to Modern-OnliShop
+                        <?php
+                        session_start();
+                        if(!isset($_SESSION['userid'])){
+                            echo "<a href=\"register.php\">Register </a> Or <a href=\"signin.php\">Sign In </a>";
+                        }else{
+                            require_once ('controller/dbconfig.php');
+                            $userid = $_SESSION['userid'];
+                            $sql = "select firstname from users where userid = '$userid'";
+                            $result = $conn->query($sql);
+                            if($result){
+                                $firstname = $result->fetch_object()->firstname;
+                                echo "<a href=\"#\">$firstname</a> or <a href=\"signout.php\">Sign out </a>";
+                            }
+                        }
+                        ?>
+                    </h2>
 				</div>
 				<div class="nav navbar-nav navbar-right social-icons wow fadeInRight animated" data-wow-delay=".5s">
 					<ul>

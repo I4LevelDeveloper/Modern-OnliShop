@@ -58,7 +58,23 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		<div class="top-header navbar navbar-default"><!--header-one-->
 			<div class="container">
 				<div class="nav navbar-nav wow fadeInLeft animated" data-wow-delay=".5s">
-					<h2>Welcome to Modern Shoppe <a href="register.php">Register </a> Or <a href="signin.php">Sign In </a></h2>
+					<h2>Welcome to Modern-OnliShop
+                        <?php
+                        session_start();
+                        if(!isset($_SESSION['userid'])){
+                            echo "<a href=\"register.php\">Register </a> Or <a href=\"signin.php\">Sign In </a>";
+                        }else{
+                            require_once ('controller/dbconfig.php');
+                            $userid = $_SESSION['userid'];
+                            $sql = "select firstname from users where userid = '$userid'";
+                            $result = $conn->query($sql);
+                            if($result){
+                                $firstname = $result->fetch_object()->firstname;
+                                echo "<a href=\"#\">$firstname</a> or <a href=\"signout.php\">Sign out </a>";
+                            }
+                        }
+                        ?>
+                    </h2>
 				</div>
 				<div class="nav navbar-nav navbar-right social-icons wow fadeInRight animated" data-wow-delay=".5s">
 					<ul>
@@ -353,7 +369,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				<div class="col-md-6 address-left wow fadeInLeft animated" data-wow-delay=".5s">
 					<div class="address-grid">
 						<h4 class="wow fadeIndown animated" data-wow-delay=".5s">DROP US A LINE </h4>
-						<form>
+						<form action="">
 							<input class="wow fadeIndown animated" data-wow-delay=".6s" type="text" placeholder="Name" required="">
 							<input class="wow fadeIndown animated" data-wow-delay=".7s" type="text" placeholder="Email" required="">
 							<input class="wow fadeIndown animated" data-wow-delay=".8s" type="text" placeholder="Subject" required="">

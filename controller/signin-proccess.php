@@ -16,7 +16,7 @@ if(isset($_POST['email']) && $_POST['email']!=''){
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
-        $userid = $result->fetch_object().userid;
+        $userid = $result->fetch_object()->userid;
         session_start();
         $_SESSION['userid'] = $userid;
         if($_POST['checkbox'] == 'r'){
