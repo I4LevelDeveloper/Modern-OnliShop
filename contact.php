@@ -369,13 +369,13 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				<div class="col-md-6 address-left wow fadeInLeft animated" data-wow-delay=".5s">
 					<div class="address-grid">
 						<h4 class="wow fadeIndown animated" data-wow-delay=".5s">DROP US A LINE </h4>
-						<form action="">
-							<input class="wow fadeIndown animated" data-wow-delay=".6s" type="text" placeholder="Name" required="">
-							<input class="wow fadeIndown animated" data-wow-delay=".7s" type="text" placeholder="Email" required="">
-							<input class="wow fadeIndown animated" data-wow-delay=".8s" type="text" placeholder="Subject" required="">
-							<textarea class="wow fadeIndown animated" data-wow-delay=".8s" placeholder="Message" required=""></textarea>
-							<input class="wow fadeIndown animated" data-wow-delay=".9s" type="submit" value="SEND">
-						</form>
+                        <form action="./controller/feedback.php" method="POST">
+                            <input class="wow fadeIndown animated" data-wow-delay=".6s" type="text" placeholder="Name" name="name" required="">
+                            <input class="wow fadeIndown animated" data-wow-delay=".7s" type="text" placeholder="Email" name="email" required="">
+                            <input class="wow fadeIndown animated" data-wow-delay=".8s" type="text" placeholder="Subject" name="subject" required="">
+                            <textarea class="wow fadeIndown animated" data-wow-delay=".8s" placeholder="Message" name="message" required=""></textarea>
+                            <input class="wow fadeIndown animated" data-wow-delay=".9s" type="submit" value="SEND">
+                        </form>
 					</div>
 				</div>
 				<div class="col-md-6 address-right">
