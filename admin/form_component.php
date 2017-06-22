@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
+<html lang='en'>
+<head>
+    <title>Products</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Creative - Bootstrap 3 Responsive Admin Template">
@@ -8,7 +9,7 @@
     <meta name="keyword" content="Creative, Dashboard, Admin, Template, Theme, Bootstrap, Responsive, Retina, Minimal">
     <link rel="shortcut icon" href="img/favicon.png">
 
-    <title>Form Component | Creative - Bootstrap 3 Responsive Admin Template</title>
+    <title>Creative - Bootstrap Admin Template</title>
 
     <!-- Bootstrap CSS -->    
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -17,43 +18,108 @@
     <!--external css-->
     <!-- font icon -->
     <link href="css/elegant-icons-style.css" rel="stylesheet" />
-    <link href="css/font-awesome.min.css" rel="stylesheet" />
-    <!-- date picker -->
-    
-    <!-- color picker -->
-    
+    <link href="css/font-awesome.min.css" rel="stylesheet" />    
+    <!-- full calendar css-->
+    <link href="assets/fullcalendar/fullcalendar/bootstrap-fullcalendar.css" rel="stylesheet" />
+    <link href="assets/fullcalendar/fullcalendar/fullcalendar.css" rel="stylesheet" />
+    <!-- easy pie chart-->
+    <link href="assets/jquery-easy-pie-chart/jquery.easy-pie-chart.css" rel="stylesheet" type="text/css" media="screen"/>
+    <!-- owl carousel -->
+    <link rel="stylesheet" href="css/owl.carousel.css" type="text/css">
+    <link href="css/jquery-jvectormap-1.2.2.css" rel="stylesheet">
     <!-- Custom styles -->
+    <link rel="stylesheet" href="css/fullcalendar.css">
+    <link href="css/widgets.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
     <link href="css/style-responsive.css" rel="stylesheet" />
+    <link href="css/xcharts.min.css" rel=" stylesheet"> 
+    <link href="css/jquery-ui-1.10.4.min.css" rel="stylesheet">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 -->
-    <!--[if lt IE 9]>
-      <script src="js/html5shiv.js"></script>
-      <script src="js/respond.min.js"></script>
-      <script src="js/lte-ie7.js"></script>
-    <![endif]-->
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
 
-  </head>
-  <body>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+    <script type="text/javascript">
+        var productsAppModule = angular.module('productsApp', []);
+        productsAppModule.factory('productsFactory', function(){
+            var products = [];
+            var factory = {};
+            
+            factory.getProducts = function(callback){
+                callback(products);
+                //console.log('in factory');
+                //console.log(products);
+            }
+            factory.createProduct = function(product){
+                products.push(product);
+            }
+            factory.removeProduct = function($index){
+                products.splice($index, 1);
+            }
+            factory.purchaseProduct = function(product){
+                for(item in products){
+                    if(products[item].name == product.name){
+                        products[item].quantity -= 1;
+                    };
+                };
+            };
+            return factory;
+        });
+        productsAppModule.controller('productsController', function($scope, productsFactory){
+            $scope.products = [];
+            productsFactory.getProducts(function(data){
+                $scope.products = data
+                //console.log('in controller');
+                //console.log(data);
+            });
+                //make sure that you are using the same syntax consistently!
+                //controller syntax and $scope syntax do not mix!
+            $scope.addProduct = function(data){
+                //console.log($scope.newProduct);
+                productsFactory.createProduct($scope.newProduct);
+                $scope.newProduct = {};
+            };
+            $scope.deleteProduct = function(data){
+                productsFactory.removeProduct($scope.deleteProduct);
+            };
+        });
+        productsAppModule.controller('ordersController', function($scope, productsFactory){
+            $scope.products = [];
+            productsFactory.getProducts(function(data){
+                $scope.products = data;
+            });
+            $scope.buyProduct = function(product){
+                productsFactory.purchaseProduct(product);
+            };
+        });
+    </script>
 
-  <!-- container section start -->
-  <section id="container" class="">
-      <!--header start-->
+</head>
+<body>
+    <section id="container" class="">
+     
+      
       <header class="header dark-bg">
             <div class="toggle-nav">
                 <div class="icon-reorder tooltips" data-original-title="Toggle Navigation" data-placement="bottom"><i class="icon_menu"></i></div>
             </div>
 
             <!--logo start-->
-            <a href="index.php" class="logo">Nice <span class="lite">Admin</span></a>
+            <a href="index.php" class="logo"><span>Administrator</span></a>
             <!--logo end-->
+
 
             <div class="nav search-row" id="top_menu">
                 <!--  search form start -->
                 <ul class="nav top-menu">                    
                     <li>
-                        <form class="navbar-form">
-                            <input class="form-control" placeholder="Search" type="text">
+                        <form class="navbar-form" action="form_component.php?action=search" method="post">
+                            <input class="form-control" name="txtsearch" type="text">
+                            <input class="btn btn-default" type="submit" value="Search" name="but_search" />
                         </form>
                     </li>                    
                 </ul>
@@ -65,89 +131,7 @@
                 <ul class="nav pull-right top-menu">
                     
                     <!-- task notificatoin start -->
-                    <li id="task_notificatoin_bar" class="dropdown">
-                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                            <i class="icon-task-l"></i>
-                            <span class="badge bg-important">5</span>
-                        </a>
-                        <ul class="dropdown-menu extended tasks-bar">
-                            <div class="notify-arrow notify-arrow-blue"></div>
-                            <li>
-                                <p class="blue">You have 5 pending tasks</p>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <div class="task-info">
-                                        <div class="desc">Design PSD </div>
-                                        <div class="percent">90%</div>
-                                    </div>
-                                    <div class="progress progress-striped">
-                                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 90%">
-                                            <span class="sr-only">90% Complete (success)</span>
-                                        </div>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <div class="task-info">
-                                        <div class="desc">
-                                            Project 1
-                                        </div>
-                                        <div class="percent">30%</div>
-                                    </div>
-                                    <div class="progress progress-striped">
-                                        <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" style="width: 30%">
-                                            <span class="sr-only">30% Complete (warning)</span>
-                                        </div>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <div class="task-info">
-                                        <div class="desc">Digital Marketing</div>
-                                        <div class="percent">80%</div>
-                                    </div>
-                                    <div class="progress progress-striped">
-                                        <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
-                                            <span class="sr-only">80% Complete</span>
-                                        </div>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <div class="task-info">
-                                        <div class="desc">Logo Designing</div>
-                                        <div class="percent">78%</div>
-                                    </div>
-                                    <div class="progress progress-striped">
-                                        <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="78" aria-valuemin="0" aria-valuemax="100" style="width: 78%">
-                                            <span class="sr-only">78% Complete (danger)</span>
-                                        </div>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <div class="task-info">
-                                        <div class="desc">Mobile App</div>
-                                        <div class="percent">50%</div>
-                                    </div>
-                                    <div class="progress progress-striped active">
-                                        <div class="progress-bar"  role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%">
-                                            <span class="sr-only">50% Complete</span>
-                                        </div>
-                                    </div>
-
-                                </a>
-                            </li>
-                            <li class="external">
-                                <a href="#">See All Tasks</a>
-                            </li>
-                        </ul>
-                    </li>
+                    
                     <!-- task notificatoin end -->
                     <!-- inbox notificatoin start-->
                     <li id="mail_notificatoin_bar" class="dropdown">
@@ -264,9 +248,9 @@
                     <li class="dropdown">
                         <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                             <span class="profile-ava">
-                                <img alt="" src="img/avatar1_small.jpg">
+                                <img alt="" src="">
                             </span>
-                            <span class="username">Jenifer Smith</span>
+                            <span class="username">CHIM Serey</span>
                             <b class="caret"></b>
                         </a>
                         <ul class="dropdown-menu extended logout">
@@ -312,755 +296,233 @@
                           <span>Dashboard</span>
                       </a>
                   </li>
-				  <li class="sub-menu">
+                  <li class="sub-menu">
                       <a href="javascript:;" class="">
                           <i class="icon_document_alt"></i>
-                          <span>Forms</span>
+                          <span>Product</span>
                           <span class="menu-arrow arrow_carrot-right"></span>
                       </a>
                       <ul class="sub">
-                          <li><a class="" href="form_component.php">Form Elements</a></li>
-                          <li><a class="" href="form_validation.php">Form Validation</a></li>
+                          <li><a class="" href="form_component.php">Add New Product</a></li>
+                          <li><a class="" href="form_validation.php">Special Offer</a></li>
                       </ul>
-                  </li>       
-                  <li class="sub-menu">
-                      <a href="javascript:;" class="">
-                          <i class="icon_desktop"></i>
-                          <span>UI Fitures</span>
-                          <span class="menu-arrow arrow_carrot-right"></span>
-                      </a>
-                      <ul class="sub">
-                          <li><a class="" href="general.html">Components</a></li>
-                          <li><a class="" href="buttons.html">Buttons</a></li>
-                          <li><a class="" href="grids.html">Grids</a></li>
-                      </ul>
-                  </li>
-                  <li>
-                      <a class="" href="widgets.html">
-                          <i class="icon_genius"></i>
-                          <span>Widgets</span>
-                      </a>
-                  </li>
-                  <li>                     
-                      <a class="" href="chart-chartjs.html">
-                          <i class="icon_piechart"></i>
-                          <span>Charts</span>
-                          
-                      </a>
-                                         
-                  </li>
-                             
-                  <li class="sub-menu">
-                      <a href="javascript:;" class="">
-                          <i class="icon_table"></i>
-                          <span>Tables</span>
-                          <span class="menu-arrow arrow_carrot-right"></span>
-                      </a>
-                      <ul class="sub">
-                          <li><a class="" href="basic_table.html">Basic Table</a></li>
-                      </ul>
-                  </li>
-                  
-                  <li class="sub-menu">
-                      <a href="javascript:;" class="">
-                          <i class="icon_documents_alt"></i>
-                          <span>Pages</span>
-                          <span class="menu-arrow arrow_carrot-right"></span>
-                      </a>
-                      <ul class="sub">                          
-                          <li><a class="" href="profile.php">Profile</a></li>
-                          <li><a class="" href="login.php"><span>Login Page</span></a></li>
-                          <li><a class="" href="blank.html">Blank Page</a></li>
-                          <li><a class="" href="404.html">404 Error</a></li>
-                      </ul>
-                  </li>
+                  </li>                   
                   
               </ul>
               <!-- sidebar menu end-->
           </div>
       </aside>
       <!--sidebar end-->
-
+      
       <!--main content start-->
       <section id="main-content">
-          <section class="wrapper">
-		  <div class="row">
-				<div class="col-lg-12">
-					<h3 class="page-header"><i class="fa fa-file-text-o"></i> Form elements</h3>
-					<ol class="breadcrumb">
-						<li><i class="fa fa-home"></i><a href="index.php">Home</a></li>
-						<li><i class="icon_document_alt"></i>Forms</li>
-						<li><i class="fa fa-file-text-o"></i>Form elements</li>
-					</ol>
-				</div>
-			</div>
+          <section class="wrapper">            
+              <!--overview start-->
               <div class="row">
-                  <div class="col-lg-12">
-                      <section class="panel">
-                          <header class="panel-heading">
-                             Form Elements
-                          </header>
-                          <div class="panel-body">
-                              <form class="form-horizontal " method="get">
-                                  <div class="form-group">
-                                      <label class="col-sm-2 control-label">Default</label>
-                                      <div class="col-sm-10">
-                                          <input type="text" class="form-control">
-                                      </div>
-                                  </div>
-                                  <div class="form-group">
-                                      <label class="col-sm-2 control-label">Help text</label>
-                                      <div class="col-sm-10">
-                                          <input type="text" class="form-control">
-                                          <span class="help-block">A block of help text that breaks onto a new line and may extend beyond one line.</span>
-                                      </div>
-                                  </div>
-                                  <div class="form-group">
-                                      <label class="col-sm-2 control-label">Rounder</label>
-                                      <div class="col-sm-10">
-                                          <input type="text" class="form-control round-input">
-                                      </div>
-                                  </div>
-                                  <div class="form-group">
-                                      <label class="col-sm-2 control-label">Input focus</label>
-                                      <div class="col-sm-10">
-                                          <input class="form-control" id="focusedInput" type="text" value="This is focused...">
-                                      </div>
-                                  </div>
-                                  <div class="form-group">
-                                      <label class="col-sm-2 control-label">Disabled</label>
-                                      <div class="col-sm-10">
-                                          <input class="form-control" id="disabledInput" type="text" placeholder="Disabled input here..." disabled>
-                                      </div>
-                                  </div>
-                                  <div class="form-group">
-                                      <label class="col-sm-2 control-label">Placeholder</label>
-                                      <div class="col-sm-10">
-                                          <input type="text"  class="form-control" placeholder="placeholder">
-                                      </div>
-                                  </div>
-                                  <div class="form-group">
-                                      <label class="col-sm-2 control-label">Password</label>
-                                      <div class="col-sm-10">
-                                          <input type="password"  class="form-control" placeholder="">
-                                      </div>
-                                  </div>
-                                  <div class="form-group">
-                                      <label class="col-lg-2 control-label">Static control</label>
-                                      <div class="col-lg-10">
-                                          <p class="form-control-static">email@example.com</p>
-                                      </div>
-                                  </div>
-                              </form>
-                          </div>
-                      </section>
-                      <section class="panel">
-                          <div class="panel-body">
-                              <form class="form-horizontal " method="get">
-                                  <div class="form-group has-success">
-                                      <label class="control-label col-lg-2" for="inputSuccess">Input with success</label>
-                                      <div class="col-lg-10">
-                                          <input type="text" class="form-control" id="inputSuccess">
-                                      </div>
-                                  </div>
-                                  <div class="form-group has-warning">
-                                      <label class="control-label col-lg-2" for="inputWarning">Input with warning</label>
-                                      <div class="col-lg-10">
-                                          <input type="text" class="form-control" id="inputWarning">
-                                      </div>
-                                  </div>
-                                  <div class="form-group has-error">
-                                      <label class="control-label col-lg-2" for="inputError">Input with error</label>
-                                      <div class="col-lg-10">
-                                          <input type="text" class="form-control" id="inputError">
-                                      </div>
-                                  </div>
-                              </form>
-                          </div>
-                      </section>
-                      <section class="panel">
-                          <div class="panel-body">
-                              <form class="form-horizontal " method="get">
-                                  <div class="form-group">
-                                      <label class="control-label col-lg-2" for="inputSuccess">Control sizing</label>
-                                      <div class="col-lg-10">
-                                          <input class="form-control input-lg m-bot15" type="text" placeholder=".input-lg">
-                                          <input class="form-control m-bot15" type="text" placeholder="Default input">
-                                          <input class="form-control input-sm m-bot15" type="text" placeholder=".input-sm">
-
-                                          <select class="form-control input-lg m-bot15">
-                                              <option>Option 1</option>
-                                              <option>Option 2</option>
-                                              <option>Option 3</option>
-                                          </select>
-                                          <select class="form-control m-bot15">
-                                              <option>Option 1</option>
-                                              <option>Option 2</option>
-                                              <option>Option 3</option>
-                                          </select>
-                                          <select class="form-control input-sm m-bot15">
-                                              <option>Option 1</option>
-                                              <option>Option 2</option>
-                                              <option>Option 3</option>
-                                          </select>
-                                      </div>
-                                  </div>
-                              </form>
-                          </div>
-                      </section>
-                      <section class="panel">
-                          <div class="panel-body">
-                              <form class="form-horizontal " method="get">
-                                  <div class="form-group">
-                                      <label class="control-label col-lg-2" for="inputSuccess">Checkboxes and radios</label>
-                                      <div class="col-lg-10">
-                                          <div class="checkbox">
-                                              <label>
-                                                  <input type="checkbox" value="">
-                                                  Option one is this and that&mdash;be sure to include why it's great
-                                              </label>
-                                          </div>
-
-                                          <div class="checkbox">
-                                              <label>
-                                                  <input type="checkbox" value="">
-                                                  Option one is this and that&mdash;be sure to include why it's great option one
-                                              </label>
-                                          </div>
-
-                                          <div class="radio">
-                                              <label>
-                                                  <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>
-                                                  Option one is this and that&mdash;be sure to include why it's great
-                                              </label>
-                                          </div>
-                                          <div class="radio">
-                                              <label>
-                                                  <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
-                                                  Option two can be something else and selecting it will deselect option one
-                                              </label>
-                                          </div>
-
-                                      </div>
-                                  </div>
-                                  <div class="form-group">
-                                      <label class="control-label col-lg-2" for="inputSuccess">Inline checkboxes</label>
-                                      <div class="col-lg-10">
-                                          <label class="checkbox-inline">
-                                              <input type="checkbox" id="inlineCheckbox1" value="option1"> 1
-                                          </label>
-                                          <label class="checkbox-inline">
-                                              <input type="checkbox" id="inlineCheckbox2" value="option2"> 2
-                                          </label>
-                                          <label class="checkbox-inline">
-                                              <input type="checkbox" id="inlineCheckbox3" value="option3"> 3
-                                          </label>
-
-                                      </div>
-                                  </div>
-                                  <div class="form-group">
-                                      <label class="control-label col-lg-2" for="inputSuccess">Selects</label>
-                                      <div class="col-lg-10">
-                                          <select class="form-control m-bot15">
-                                              <option>1</option>
-                                              <option>2</option>
-                                              <option>3</option>
-                                              <option>4</option>
-                                              <option>5</option>
-                                          </select>
-
-                                          <select multiple class="form-control">
-                                              <option>1</option>
-                                              <option>2</option>
-                                              <option>3</option>
-                                              <option>4</option>
-                                              <option>5</option>
-                                          </select>
-                                      </div>
-                                  </div>
-
-                                  <div class="form-group">
-                                      <label class="control-label col-lg-2" for="inputSuccess">Column sizing</label>
-                                      <div class="col-lg-10">
-                                          <div class="row">
-                                              <div class="col-lg-2">
-                                                  <input type="text" class="form-control" placeholder=".col-lg-2">
-                                              </div>
-                                              <div class="col-lg-3">
-                                                  <input type="text" class="form-control" placeholder=".col-lg-3">
-                                              </div>
-                                              <div class="col-lg-4">
-                                                  <input type="text" class="form-control" placeholder=".col-lg-4">
-                                              </div>
-                                          </div>
-
-                                      </div>
-                                  </div>
-
-                              </form>
-                          </div>
-                      </section>
-                  </div>
-              </div>
-              <!-- Basic Forms & Horizontal Forms-->
-              
-              <div class="row">
-                  <div class="col-lg-6">
-                      <section class="panel">
-                          <header class="panel-heading">
-                              Basic Forms
-                          </header>
-                          <div class="panel-body">
-                              <form role="form">
-                                  <div class="form-group">
-                                      <label for="exampleInputEmail1">Email address</label>
-                                      <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
-                                  </div>
-                                  <div class="form-group">
-                                      <label for="exampleInputPassword1">Password</label>
-                                      <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-                                  </div>
-                                  <div class="form-group">
-                                      <label for="exampleInputFile">File input</label>
-                                      <input type="file" id="exampleInputFile">
-                                      <p class="help-block">Example block-level help text here.</p>
-                                  </div>
-                                  <div class="checkbox">
-                                      <label>
-                                          <input type="checkbox"> Check me out
-                                      </label>
-                                  </div>
-                                  <button type="submit" class="btn btn-primary">Submit</button>
-                              </form>
-
-                          </div>
-                      </section>
-                  </div>
-                  <div class="col-lg-6">
-                      <section class="panel">
-                          <header class="panel-heading">
-                              Horizontal Forms
-                          </header>
-                          <div class="panel-body">
-                              <form class="form-horizontal" role="form">
-                                  <div class="form-group">
-                                      <label for="inputEmail1" class="col-lg-2 control-label">Email</label>
-                                      <div class="col-lg-10">
-                                          <input type="email" class="form-control" id="inputEmail1" placeholder="Email">
-                                          <p class="help-block">Example block-level help text here.</p>
-                                      </div>
-                                  </div>
-                                  <div class="form-group">
-                                      <label for="inputPassword1" class="col-lg-2 control-label">Password</label>
-                                      <div class="col-lg-10">
-                                          <input type="password" class="form-control" id="inputPassword1" placeholder="Password">
-                                      </div>
-                                  </div>
-                                  <div class="form-group">
-                                      <div class="col-lg-offset-2 col-lg-10">
-                                          <div class="checkbox">
-                                              <label>
-                                                  <input type="checkbox"> Remember me
-                                              </label>
-                                          </div>
-                                      </div>
-                                  </div>
-                                  <div class="form-group">
-                                      <div class="col-lg-offset-2 col-lg-10">
-                                          <button type="submit" class="btn btn-danger">Sign in</button>
-                                      </div>
-                                  </div>
-                              </form>
-                          </div>
-                      </section>
-                      <section class="panel">
-
-                          <div class="panel-body">
-                              <a href="#myModal" data-toggle="modal" class="btn btn-primary">
-                                  Form in Modal
-                              </a>
-                              <a href="#myModal-1" data-toggle="modal" class="btn  btn-warning">
-                                  Form in Modal 2
-                              </a>
-                              <a href="#myModal-2" data-toggle="modal" class="btn  btn-danger">
-                                  Form in Modal 3
-                              </a>
-
-                              <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade">
-                                  <div class="modal-dialog">
-                                      <div class="modal-content">
-                                          <div class="modal-header">
-                                              <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
-                                              <h4 class="modal-title">Form Tittle</h4>
-                                          </div>
-                                          <div class="modal-body">
-
-                                              <form role="form">
-                                                  <div class="form-group">
-                                                      <label for="exampleInputEmail1">Email address</label>
-                                                      <input type="email" class="form-control" id="exampleInputEmail3" placeholder="Enter email">
-                                                  </div>
-                                                  <div class="form-group">
-                                                      <label for="exampleInputPassword1">Password</label>
-                                                      <input type="password" class="form-control" id="exampleInputPassword3" placeholder="Password">
-                                                  </div>
-                                                  <div class="form-group">
-                                                      <label for="exampleInputFile">File input</label>
-                                                      <input type="file" id="exampleInputFile3">
-                                                      <p class="help-block">Example block-level help text here.</p>
-                                                  </div>
-                                                  <div class="checkbox">
-                                                      <label>
-                                                          <input type="checkbox"> Check me out
-                                                      </label>
-                                                  </div>
-                                                  <button type="submit" class="btn btn-primary">Submit</button>
-                                              </form>
-                                          </div>
-                                      </div>
-                                  </div>
-                              </div>
-                              <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal-1" class="modal fade">
-                                  <div class="modal-dialog">
-                                      <div class="modal-content">
-                                          <div class="modal-header">
-                                              <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
-                                              <h4 class="modal-title">Form Tittle</h4>
-                                          </div>
-                                          <div class="modal-body">
-
-                                              <form class="form-horizontal" role="form">
-                                                  <div class="form-group">
-                                                      <label for="inputEmail1" class="col-lg-2 control-label">Email</label>
-                                                      <div class="col-lg-10">
-                                                          <input type="email" class="form-control" id="inputEmail4" placeholder="Email">
-                                                      </div>
-                                                  </div>
-                                                  <div class="form-group">
-                                                      <label for="inputPassword1" class="col-lg-2 control-label">Password</label>
-                                                      <div class="col-lg-10">
-                                                          <input type="password" class="form-control" id="inputPassword4" placeholder="Password">
-                                                      </div>
-                                                  </div>
-                                                  <div class="form-group">
-                                                      <div class="col-lg-offset-2 col-lg-10">
-                                                          <div class="checkbox">
-                                                              <label>
-                                                                  <input type="checkbox"> Remember me
-                                                              </label>
-                                                          </div>
-                                                      </div>
-                                                  </div>
-                                                  <div class="form-group">
-                                                      <div class="col-lg-offset-2 col-lg-10">
-                                                          <button type="submit" class="btn btn-info">Sign in</button>
-                                                      </div>
-                                                  </div>
-                                              </form>
-
-                                          </div>
-
-                                      </div>
-                                  </div>
-                              </div>
-                              <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal-2" class="modal fade">
-                                  <div class="modal-dialog">
-                                      <div class="modal-content">
-                                          <div class="modal-header">
-                                              <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
-                                              <h4 class="modal-title">Form Tittle</h4>
-                                          </div>
-                                          <div class="modal-body">
-                                              <form class="form-inline" role="form">
-                                                  <div class="form-group">
-                                                      <label class="sr-only" for="exampleInputEmail2">Email address</label>
-                                                      <input type="email" class="form-control sm-input" id="exampleInputEmail5" placeholder="Enter email">
-                                                  </div>
-                                                  <div class="form-group">
-                                                      <label class="sr-only" for="exampleInputPassword2">Password</label>
-                                                      <input type="password" class="form-control sm-input" id="exampleInputPassword5" placeholder="Password">
-                                                  </div>
-                                                  <div class="checkbox">
-                                                      <label>
-                                                          <input type="checkbox"> Remember me
-                                                      </label>
-                                                  </div>
-                                                  <button type="submit" class="btn btn-success">Sign in</button>
-                                              </form>
-
-                                          </div>
-
-                                      </div>
-                                  </div>
-                              </div>
-                          </div>
-                      </section>
-                  </div>
-              </div>
-              <!-- Inline form-->
-              <div class="row">
-                  <div class="col-lg-12">
-                      <section class="panel">
-                          <header class="panel-heading">
-                              Inline form
-                          </header>
-                          <div class="panel-body">
-                              <form class="form-inline" role="form">
-                                  <div class="form-group">
-                                      <label class="sr-only" for="exampleInputEmail2">Email address</label>
-                                      <input type="email" class="form-control" id="exampleInputEmail2" placeholder="Enter email">
-                                  </div>
-                                  <div class="form-group">
-                                      <label class="sr-only" for="exampleInputPassword2">Password</label>
-                                      <input type="password" class="form-control" id="exampleInputPassword2" placeholder="Password">
-                                  </div>
-                                  <div class="checkbox">
-                                      <label>
-                                          <input type="checkbox"> Remember me
-                                      </label>
-                                  </div>
-                                  <button type="submit" class="btn btn-primary">Sign in</button>
-                              </form>
-
-                          </div>
-                      </section>
-
-                  </div>
-              </div>
-
-              <div class="row">
-                  <div class="col-lg-12">                      
-
-                      <div class="row">
-                          <div class="col-lg-6">
-                              <section class="panel">
-                                  <header class="panel-heading">
-                                      Color Pickers & Date Pickers
-                                  </header>
-                                  <div class="panel-body">
-                                      <form class="form-horizontal " action="#">
-                                          <!--date picker start-->
-
-                                          <div class="form-group">
-                                              <label class="control-label col-sm-4">Default Datepicker</label>
-                                              <div class="col-sm-6">
-                                                  <input id="cp1" type="text" value="28-10-2013" size="16" class="form-control">
-                                              </div>
-                                          </div>
-                                          <div class="form-group">
-                                              <label class="control-label col-sm-4">Starts with years view</label>
-                                              <div class="col-sm-6">
-
-
-                                                  <div class="input-append date" id="dpYears" data-date="18-06-2013"
-                                                       data-date-format="dd-mm-yyyy" data-date-viewmode="years">
-                                                      <input class="form-control" size="16" type="text" value="28-06-2013" readonly>
-                                                      <span class="add-on"><i class="icon-calendar"></i></span>
-                                                  </div>
-                                              </div>
-                                          </div>
-
-                                          <div class="form-group">
-                                              <label class="control-label col-sm-4"> Date Ranges</label>
-                                              <div class="col-sm-6">
-                                                  <div class="input-prepend">
-                                                      <input id="reservation" type="text" class=" form-control" />
-                                                  </div>
-                                              </div>
-                                          </div>
-                                          <!--date picker end-->
-
-                                          <!--color picker start-->
-                                          <div class="form-group">
-                                              <label class="control-label col-sm-4">Default</label>
-
-                                              <div class="col-sm-5">
-                                                  <input type="text" value="#CCCCCC" class="cp1 form-control">
-                                              </div>
-                                          </div>
-                                          <div class="form-group">
-                                              <label class="control-label col-sm-4">RGBA</label>
-
-                                              <div class="col-sm-5">
-                                                  <input type="text" data-color-format="rgba" value="rgb(255,255,255,1)" class="cp2 form-control">
-                                              </div>
-                                          </div>
-
-                                          <!--color picker end-->
-
-                                      </form>
-
-
-                                  </div>
-                              </section>
-                              <section class="panel">
-                                  <header class="panel-heading">
-                                      Tags Input
-                                  </header>
-                                  <div class="panel-body">
-                                      <input name="tagsinput" id="tagsinput" class="tagsinput" value="Creative, Dashboard, Admin, Template, Theme, Bootstrap, Responsive, Retina, Minimal" />
-                                  </div>
-                              </section>
-                          </div>
-                          <div class="col-lg-6">
-                              <section class="panel">
-                                  <header class="panel-heading">
-                                      Custom Checkbox & Radio
-                                  </header>
-                                  <div class="panel-body">
-                                      <form action="#" method="get" accept-charset="utf-8">
-                                          <div class="checkboxes">
-                                              <label class="label_check" for="checkbox-01">
-                                                  <input name="sample-checkbox-01" id="checkbox-01" value="1" type="checkbox" checked /> I agree to the terms &#38; conditions.
-                                              </label>
-                                              <label class="label_check" for="checkbox-02">
-                                              <input name="sample-checkbox-02" id="checkbox-02" value="1" type="checkbox" /> Please send me regular updates. </label>
-                                              <label class="label_check" for="checkbox-03">
-                                              <input name="sample-checkbox-02" id="checkbox-03" value="1" type="checkbox" /> This is nice checkbox.</label>
-
-                                          </div>
-                                          <div class="radios">
-                                              <label class="label_radio" for="radio-01">
-                                                  <input name="sample-radio" id="radio-01" value="1" type="radio" checked /> This is option A...
-                                              </label>
-                                              <label class="label_radio" for="radio-02">
-                                                  <input name="sample-radio" id="radio-02" value="1" type="radio" /> and this is option B...
-                                              </label>
-                                              <label class="label_radio" for="radio-03">
-                                                  <input name="sample-radio" id="radio-03" value="1" type="radio" /> or simply choose option C
-                                              </label>
-                                          </div>
-                                      </form>
-                                  </div>
-
-                              </section>
-
-                              <section class="panel">
-                                  <header class="panel-heading">
-                                      Switch
-                                  </header>
-                                  <div class="panel-body">
-                                      <div class="row m-bot15">
-                                          <div class="col-sm-6 text-center">
-                                              <input type="checkbox" checked="" data-toggle="switch" />
-                                          </div>
-                                          <div class="col-sm-6 text-center">
-                                              <input type="checkbox" data-toggle="switch" />
-                                          </div>
-                                      </div>
-                                      <div class="row m-bot15">
-                                          <div class="col-sm-6 text-center">
-                                              <div class="switch switch-square"
-                                                   data-on-label="<i class=' icon-ok'></i>"
-                                                   data-off-label="<i class='icon-remove'></i>">
-                                                  <input type="checkbox" />
-                                              </div>
-                                          </div>
-                                          <div class="col-sm-6 text-center">
-                                              <div class="switch switch-square"
-                                                   data-on-label="<i class=' icon-ok'></i>"
-                                                   data-off-label="<i class='icon-remove'></i>">
-                                                  <input type="checkbox" checked="" />
-                                              </div>
-                                          </div>
-                                      </div>
-                                      <div class="row">
-                                          <div class="col-sm-6 text-center">
-                                              <input type="checkbox" disabled data-toggle="switch" />
-                                          </div>
-                                          <div class="col-sm-6 text-center">
-                                              <input type="checkbox" checked disabled data-toggle="switch" />
-                                          </div>
-                                      </div>
-                                  </div>
-                              </section>
-
-
-                          </div>
-                      </div>
-
-                      <div class="row">
-                        <!-- Bootsrep Editor -->
-                        <div class="col-lg-12">
-                            <section class="panel">
-                                  <header class="panel-heading">
-                                      Bootsrep Editor
-                                  </header>
-                                  <div class="panel-body">    
-                                    <div id="editor" class="btn-toolbar" data-role="editor-toolbar" data-target="#editor"></div>
-                                    </div>
-                            </section>
-                          </div>
-                          <!-- CKEditor -->
-                          <div class="col-lg-12">
-                              <section class="panel">
-                                  <header class="panel-heading">
-                                      CKEditor
-                                  </header>
-                                  <div class="panel-body">
-                                      <div class="form">
-                                          <form action="#" class="form-horizontal">
-                                              <div class="form-group">
-                                                  <label class="control-label col-sm-2">CKEditor</label>
-                                                  <div class="col-sm-10">
-                                                      <textarea class="form-control ckeditor" name="editor1" rows="6"></textarea>
-                                                  </div>
-                                              </div>
-                                          </form>
-                                      </div>
-                                  </div>
-                              </section>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-              <!-- page end-->
-          </section>
+                <div class="col-lg-12">
+                    <h3 class="page-header"><i class="fa fa-laptop"></i> Dashboard</h3>
+                    <ol class="breadcrumb">
+                        <li><i class="fa fa-home"></i><a href="index.php">Home</a></li>
+                        <li><i class="fa fa-laptop"></i>Dashboard</li>                          
+                    </ol>
+                </div>
+            </div>       
+            
       </section>
       <!--main content end-->
-      <div class="text-right">
-        <div class="credits">
-            <!-- 
-                All the links in the footer should remain intact. 
-                You can delete the links only if you purchased the pro version.
-                Licensing information: https://bootstrapmade.com/license/
-                Purchase the pro version form: https://bootstrapmade.com/buy/?theme=NiceAdmin
-            -->
-            <a href="https://bootstrapmade.com/free-business-bootstrap-themes-website-templates/">Business Bootstrap Themes</a> by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-        </div>
-    </div>
   </section>
-  <!-- container section end -->
-    <!-- javascripts -->
-    <script src="js/jquery.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <!-- nice scroll -->
-    <script src="js/jquery.scrollTo.min.js"></script>
-    <script src="js/jquery.nicescroll.js" type="text/javascript"></script>
+    <div class="container">
 
-    <!-- jquery ui -->
-    <script src="js/jquery-ui-1.9.2.custom.min.js"></script>
+        <div>
+            <h2>Add a Product:</h2>
+            <form class="form-horizontal" role="form" enctype="multipart/form-data"  Action="process_upload.php" method="post">
+              <div class="form-group">
+                <label class="control-label col-sm-2" for="name">Name:</label>
+                <div class="col-sm-10">
+                  <input type="text" name="name">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-sm-2" for="price">Price:</label>
+                <div class="col-sm-10">
+                  <input type="number" name="price">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-sm-2" for="price">Quantity:</label>
+                <div class="col-sm-10">
+                  <input type="number" name="quantity">
+                </div>
+              </div>
 
-    <!--custom checkbox & radio-->
-    <script type="text/javascript" src="js/ga.js"></script>
-    <!--custom switch-->
-    <script src="js/bootstrap-switch.js"></script>
-    <!--custom tagsinput-->
-    <script src="js/jquery.tagsinput.js"></script>
-    
-    <!-- colorpicker -->
-   
-    <!-- bootstrap-wysiwyg -->
-    <script src="js/jquery.hotkeys.js"></script>
-    <script src="js/bootstrap-wysiwyg.js"></script>
-    <script src="js/bootstrap-wysiwyg-custom.js"></script>
-    <!-- ck editor -->
-    <script type="text/javascript" src="assets/ckeditor/ckeditor.js"></script>
-    <!-- custom form component script for this page-->
-    <script src="js/form-component.js"></script>
-    <!-- custome script for all page -->
-    <script src="js/scripts.js"></script>
+              <input type="hidden" ng-model="newProduct.quantity" ng-value="newProduct.quantity = newProduct.quantity">
+              <div class="form-group">
+                <label class="control-label col-sm-2" for="price">Description:</label>
+                <div class="col-sm-10">
+                  <textarea name="description" cols="22" rows="3"></textarea>
+                </div>
+            </div>
 
+              
 
-  </body>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="price">Category:</label>
+                <div class="col-sm-10">
+                    <select name="category" style="width: 180px; height: 25px">
+                    <optgroup label="Baby">
+                        <optgroup label="Bath & Care">
+                            <option value="baby_wipes">Baby Wipes</option>
+                            <option value="baby_soaps">Baby Soaps</option>
+                            <option value="Lotion_and_oils">Lotion and Oils</option>
+                            <option value="powder">Powder</option>
+                            <option value="shampoos">Shampoos</option>
+                        </optgroup>
+                        <optgroup label="Baby Clothes">
+                            <option value="frocks">Frocks</option>
+                            <option value="socks&tights">Shocks & Tights</option>
+                            <option value="sweaters&caps">Sweaters & Caps</option>
+                            <option value="nightwear">Night Wear</option>
+                            <option value="blankets">Blankets</option>
+                        </optgroup>
+                        <optgroup label="Baby Gear">
+                            <option value="babywalker">Baby Walkers</option>
+                            <option value="stroller">Stroller</option>
+                            <option value="pram&toy">Pram & Toy</option>
+                            <option value="cribs&cradle">Cribs & Cradle</option>
+                            <option value="booster&seat">Booster & Seat</option>
+                        </optgroup>
+                    </optgroup>
+                    <optgroup label="Kids">
+                        <optgroup label="New Arrival">
+                            <option value="topwear">Topwear</option>
+                            <option value="bottomwear">Bottomwear</option>
+                            <option value="innerwear">Innerwear</option>
+                            <option value="nightwear">NightWear</option>
+                            <option value="swimwear">Swimwear</option>
+                        </optgroup>
+                        <optgroup label="Boys">
+                            <option value="jeans">Jeans</option>
+                            <option value="shirt">Shirt</option>
+                            <option value="t-shirt">T-Shirt</option>
+                            <option value="winterwear">Winter Wear</option>
+                            <option value="partywear">Party Wear</option>
+                        </optgroup>
+                        <optgroup label="Girls">
+                            <option value="tops">Tops</option>
+                            <option value="leggings">Leggings</option>
+                            <option value="dresses">Dresses</option>
+                            <option value="skirts">Skirts</option>
+                            <option value="casualdress">Casual Dress</option>
+                        </optgroup>
+                    </optgroup>
+                    <optgroup label="Assessories">
+                        <option value="jewellery">Jewellery</option>
+                        <option value="hairbrand&clips">Hair Brand and Clips</option>
+                        <option value="bangles">Bangles</option>
+                        <option value="caps&belts">Caps & Belts</option>
+                        <option value="bags">Bags</option>
+                    </optgroup>
+                    <optgroup label="Toys">
+                        <optgroup label="Baby">
+                            <option value="rocker">Rockers</option>
+                            <option value="ratlle">Rattles</option>
+                            <option value="strollertoy">Stroller Toy</option>
+                            <option value="dollhouses">Doll Houses</option>
+                            <option value="playset">Play Set</option>
+                        </optgroup>
+                        <optgroup label="Pretend Play">
+                            <option value="videogame">Video Game</option>
+                            <option value="kitchenset">Kitchen Set</option>
+                            <option value="sandtoy">Sand Toy</option>
+                            <option value="toolset">Tool Set</option>
+                            <option value="bathtoy">Bath Toy</option>
+                        </optgroup>
+                        <optgroup label="Outdoor">
+                            <option value="swimming">Swimming</option>
+                            <option value="rideons">Rideons</option>
+                            <option value="scooters">Scooters</option>
+                            <option value="remotecontrol">Remote Control</option>
+                            <option value="animals">Animals</option>
+                        </optgroup>
+                    </optgroup>
+                </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="price">ArriveDate:</label>
+                <div class="col-sm-10">
+                
+                  <input type="date" name="arrivedate" style="width: 180px; height: 25px">
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="price">Image:</label>
+                <div class="col-sm-10">
+                  <input type="file" name="image" >
+                </div>
+            </div>
+            
+
+              <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                  <button type="submit" name="addProduct" class="btn btn-success">Add Product</button>
+                </div>
+              </div>
+            </form>
+            <br>
+
+            <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>id</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Description</th>
+                    <th>Category</th>
+                    <th>ArriveDate</th>
+                    <th>Image</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                <?php            
+                    require_once('../controller/dbconfig.php');
+                    $condition= "";
+
+                    if(isset($_GET['action']) && $_GET['action']=="search"){
+                        $searchtxt=$_POST['txtsearch'];
+                        $condition= "where pname like '%$searchtxt%'";
+                    }
+
+                    $sql = "SELECT * FROM products $condition";
+                    $record = $conn->query($sql);
+                    while ($products=mysqli_fetch_assoc($record)) {                
+
+                    echo "<tr>";
+                         echo "<td>".$products['pid']."</td>";
+                         echo "<td>".$products['pname']."</td>";
+                         echo "<td>".$products['price']."</td>";
+                         echo "<td>".$products['quantity']."</td>";
+                         echo "<td>".$products['description']."</td>";
+                         echo "<td>".$products['category']."</td>";
+                         echo "<td>".$products['arrived_date']."</td>";
+                         echo "<td>".$products['image1']."</td>";
+                         echo "<td><a href='edit.php?id=$products[pid]&name=$products[pname]&price=$products[price]&quantity=$products[quantity]&description=$products[description]&category=$products[category]&arrivedate=$products[arrived_date]&image1=$products[image1]'>Edit</a>
+                                <a href='deleteproduct.php?id=".$products['pid']."'>Delete</a>
+                         </td>";                        
+                    echo "</tr>";
+                    }
+                ?>
+                </tbody>
+             </table>
+        </div>
+
+</div>
+
+</body>
+
 </html>
